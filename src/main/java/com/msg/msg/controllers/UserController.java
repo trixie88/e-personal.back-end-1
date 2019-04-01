@@ -60,7 +60,7 @@ public class UserController {
 
 	@GetMapping("trainer-type/{idtraining_type}")
 	public List<User> getTrainerByType(@PathVariable int idtraining_type) {
-		return userRepository.findTrainerByType(idtraining_type);
+		return userRepository.findByTrainingType(idtraining_type);
 	}
 
 	@GetMapping("trainer-type-price/{idtraining_type}/{price}")
@@ -74,55 +74,64 @@ public class UserController {
 	}
 
 	@PostMapping("set-price/{iduser}/{price}")
-	public void setPrice(@RequestHeader(value ="X-MSG-AUTH") String tokenAlphanumeric, @PathVariable int iduser,
+	public void setPrice(@RequestHeader(value ="X-MSG-AUTH") String alphanumeric, @PathVariable int iduser,
 			@PathVariable double price) {
-		Token.validateToken(tokenAlphanumeric, tokenRepository);
+		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
+		Token.validateToken(token);
 		User user = userRepository.findById(iduser);
 		user.setPrice(price);
 	}
 
 	@PostMapping("trainer-choose-area/{fk_trainer_id}/{fk_area_id}")
-	public void chooseArea(@RequestHeader(value ="X-MSG-AUTH") String tokenAlphanumeric, @PathVariable int fk_trainer_id,
+	public void chooseArea(@RequestHeader(value ="X-MSG-AUTH") String alphanumeric, @PathVariable int fk_trainer_id,
 			@PathVariable int fk_area_id) {
-		Token.validateToken(tokenAlphanumeric, tokenRepository);
+		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
+		Token.validateToken(token);
 		areaRepository.addArea(fk_trainer_id, fk_area_id);
 
 	}
 
 	@PostMapping("trainer-choose-type/{fk_trainer_id}/{fk_training_type}")
-	public void trainerSpecialization(@RequestHeader(value ="X-MSG-AUTH") String tokenAlphanumeric,
+	public void trainerSpecialization(@RequestHeader(value ="X-MSG-AUTH") String alphanumeric,
 			@PathVariable int fk_trainer_id, @PathVariable int fk_training_type) {
-		Token.validateToken(tokenAlphanumeric, tokenRepository);
+		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
+		Token.validateToken(token);
 		trainingTypeRepository.addType(fk_trainer_id, fk_training_type);
 	}
 
 	@PostMapping("trainer-remove-area/{fk_trainer_id}/{fk_area_id}")
-	public void removeArea(@RequestHeader(value ="X-MSG-AUTH") String tokenAlphanumeric, @PathVariable int fk_trainer_id,
+	public void removeArea(@RequestHeader(value ="X-MSG-AUTH") String alphanumeric, @PathVariable int fk_trainer_id,
 			@PathVariable int fk_area_id) {
-		Token.validateToken(tokenAlphanumeric, tokenRepository);
+		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
+		Token.validateToken(token);
 		areaRepository.removeArea(fk_trainer_id, fk_area_id);
 	}
 
 	@PostMapping("trainer-remove-type/{fk_trainer_id}/{fk_training_type}")
-	public void removeType(@RequestHeader(value ="X-MSG-AUTH") String tokenAlphanumeric, @PathVariable int fk_trainer_id,
+	public void removeType(@RequestHeader(value ="X-MSG-AUTH") String alphanumeric, @PathVariable int fk_trainer_id,
 			@PathVariable int fk_training_type) {
-		Token.validateToken(tokenAlphanumeric, tokenRepository);
+		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
+		Token.validateToken(token);
 		trainingTypeRepository.removeType(fk_trainer_id, fk_training_type);
 	}
 
 	@PostMapping("bann-user/{iduser}")
-	public void bannUser(@RequestHeader(value ="X-MSG-AUTH") String tokenAlphanumeric, @PathVariable int iduser) {
-		Token.validateToken(tokenAlphanumeric, tokenRepository);
+	public void bannUser(@RequestHeader(value ="X-MSG-AUTH") String alphanumeric, @PathVariable int iduser) {
+		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
+		Token.validateToken(token);
 		User user = userRepository.findById(iduser);
+		User.validateUser(user);
 		user.setActiveStatus(0);
 		userRepository.save(user);
 
 	}
 
 	@PostMapping("unbann-user/{iduser}")
-	public void unBannUser(@RequestHeader(value ="X-MSG-AUTH") String tokenAlphanumeric, @PathVariable int iduser) {
-		Token.validateToken(tokenAlphanumeric, tokenRepository);
+	public void unBannUser(@RequestHeader(value ="X-MSG-AUTH") String alphanumeric, @PathVariable int iduser) {
+		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
+		Token.validateToken(token);
 		User user = userRepository.findById(iduser);
+		User.validateUser(user);
 		user.setActiveStatus(1);
 		userRepository.save(user);
 		;

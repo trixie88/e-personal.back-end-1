@@ -59,11 +59,11 @@ public class LoginController {
 		}
 	}
 
-	@GetMapping("/userFromToken")
-	public User getFromToken(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric) {
-		int userId = tokenRepository.getUserIDFromTokenAlphaNumeric(alphanumeric);
-		return userRepository.findById(userId);
-	}
+//	@GetMapping("/userFromToken")
+//	public User getFromToken(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric) {
+//		int userId = tokenRepository.getUserIDFromTokenAlphaNumeric(alphanumeric);
+//		return userRepository.findById(userId);
+//	}
 
 	@PostMapping("/logout")
 	public void logout(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric) {
