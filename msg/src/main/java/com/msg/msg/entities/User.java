@@ -200,7 +200,11 @@ public class User implements Serializable {
 	public void setActiveStatus(int activeStatus) {
 		this.activeStatus = activeStatus;
 	}
-	
+
+	public String getPassword() {
+		return password;
+	}
+
 	public List<Message> getFromMsgs() {
 		return fromMsgs;
 	}

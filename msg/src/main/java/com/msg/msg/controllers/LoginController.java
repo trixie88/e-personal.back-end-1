@@ -44,26 +44,22 @@ public class LoginController {
 	public Token loginUser(@RequestBody Login login) {
 		String username = login.getUsername();
 		String password = login.getPassword();
-		User user1 = userRepository.findByUsername(username);
-		User.validateUser(user1);
-		String email = user1.getEmail();
-		String salt = password + email;
-		User user = userRepository.findByUsernameAndPassword(username, CryptoConverter.encrypt(salt));
+		User user = userRepository.findByUsernameAndPassword(username, CryptoConverter.encrypt(password));
 		if (user != null) {
 			String alphanumeric = UUID.randomUUID().toString();
 			Token token = new Token(alphanumeric, user);
 			tokenRepository.save(token);
 			return token;
 		} else {
-			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid Username/Password");
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Username/Password");
 		}
 	}
 
-//	@GetMapping("/userFromToken")
-//	public User getFromToken(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric) {
-//		int userId = tokenRepository.getUserIDFromTokenAlphaNumeric(alphanumeric);
-//		return userRepository.findById(userId);
-//	}
+	@GetMapping("/userFromToken")
+	public User getFromToken(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric) {
+		int userId = tokenRepository.getUserIDFromTokenAlphaNumeric(alphanumeric);
+		return userRepository.findById(userId);
+	}
 
 	@PostMapping("/logout")
 	public void logout(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric) {

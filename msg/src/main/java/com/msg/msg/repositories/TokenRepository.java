@@ -14,8 +14,8 @@ import com.msg.msg.entities.Token;
 @RepositoryRestResource
 public interface TokenRepository extends JpaRepository<Token, Integer> {
 
-//	@Query(value = "select iduser from token where alphanumeric=?", nativeQuery = true)
-//	int getUserIDFromTokenAlphaNumeric(String alphanumeric);
+	@Query(value = "select iduser from token where alphanumeric=?", nativeQuery = true)
+	int getUserIDFromTokenAlphaNumeric(String alphanumeric);
 	
 	Token findByAlphanumeric(String alphanumeric);
 

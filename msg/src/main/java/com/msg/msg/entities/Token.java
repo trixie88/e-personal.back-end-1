@@ -77,7 +77,8 @@ public class Token implements Serializable {
 		this.date_of_creation = date_of_creation;
 	}
 
-	public static void validateToken(Token token) {
+	public static void validateToken(String alphanumeric, TokenRepository tokenRepository) {
+		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
 		if (token == null) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not Authorized");
 		}

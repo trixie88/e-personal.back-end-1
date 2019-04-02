@@ -37,36 +37,33 @@ public class MsgController {
 	public TokenRepository tokenRepository;
 
 	@GetMapping("/sent")
-	public Result<Message> getSentMessages(@RequestHeader(value ="X-MSG-AUTH") String alphanumeric,
+	public Result<Message> getSentMessages(@RequestHeader("X-MSG-AUTH") String tokenAlphanumeric,
 			@RequestParam int index1, @RequestParam int index2) {
-		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
-		Token.validateToken(token);
-		Result.validateIndexes(index1, index2);
-		int senderId = token.getUser().getId();
+		Token.validateToken(tokenAlphanumeric, tokenRepository);
+//		Result.validateIndexes(index1, index2);
+		int senderId = tokenRepository.getUserIDFromTokenAlphaNumeric(tokenAlphanumeric);
 		List<Message> msgs = messageRepository.findSentMessages(senderId, index1, index2);
 		int count = DatabaseHelper.getSentMsgCount(senderId);
 		return new Result<Message>(count, msgs);
 	}
 
 	@GetMapping("/inbox")
-	public Result<Message> getInboxMessages(@RequestHeader(value ="X-MSG-AUTH") String alphanumeric,
+	public Result<Message> getInboxMessages(@RequestHeader("X-MSG-AUTH") String tokenAlphanumeric,
 			@RequestParam int index1, @RequestParam int index2) {
-		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
-		Token.validateToken(token);
-		Result.validateIndexes(index1, index2);
-		int receiverId = token.getUser().getId();
+		Token.validateToken(tokenAlphanumeric, tokenRepository);
+//		Result.validateIndexes(index1, index2);
+		int receiverId = tokenRepository.getUserIDFromTokenAlphaNumeric(tokenAlphanumeric);
 		List<Message> msgs = messageRepository.findInboxMessages(receiverId, index1, index2);
 		int count = DatabaseHelper.getInboxMsgCount(receiverId);
 		return new Result<Message>(count, msgs);
 	}
 
 	@GetMapping("/UsersMsg/{trainerUsername}/{clientUsername}")
-	public Result<Message> getUserMessages(@RequestHeader(value ="X-MSG-AUTH") String alphanumeric,
+	public Result<Message> getUserMessages(@RequestHeader("X-MSG-AUTH") String tokenAlphanumeric,
 			@PathVariable String trainerUsername, @PathVariable String clientUsername, @RequestParam int index1,
 			@RequestParam int index2) {
-		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
-		Token.validateToken(token);
-		Result.validateIndexes(index1, index2);
+		Token.validateToken(tokenAlphanumeric, tokenRepository);
+//		Result.validateIndexes(index1, index2);
 		User trainer = userRepository.findByUsername(trainerUsername);
 		User.validateUser(trainer);
 		User client = userRepository.findByUsername(clientUsername);
@@ -78,13 +75,12 @@ public class MsgController {
 	}
 
 	@PostMapping("/save/{receiverUsername}")
-	public void sendMessage(@RequestHeader(value ="X-MSG-AUTH") String alphanumeric,
+	public void sendMessage(@RequestHeader("X-MSG-AUTH") String tokenAlphanumeric,
 			@PathVariable String receiverUsername, @RequestBody String content) {
-		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
-		Token.validateToken(token);
-		int senderId = token.getUser().getId();
+		Token.validateToken(tokenAlphanumeric, tokenRepository);
+		int senderId = tokenRepository.getUserIDFromTokenAlphaNumeric(tokenAlphanumeric);
 		User sender = userRepository.findById(senderId);
-//		User.validateUser(sender);
+		User.validateUser(sender);
 		User receiver = userRepository.findByUsername(receiverUsername);
 		User.validateUser(receiver);
 		Message message = new Message(sender, receiver, content);
