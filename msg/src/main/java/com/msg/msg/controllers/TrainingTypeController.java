@@ -22,11 +22,10 @@ public class TrainingTypeController {
 	@Autowired
 	public TrainingTypeRepository trainingTypeRepository;
 	
-	@Autowired TokenRepository tokenRepository;
+	
 	
 	@GetMapping("/all")
-	public List<TrainingType> getAll(@RequestHeader(value ="X-MSG-AUTH") String tokenAlphanumeric){
-		Token.validateToken(tokenAlphanumeric, tokenRepository);
+	public List<TrainingType> getAll(){
 		return trainingTypeRepository.findAll();
 	}
 }

@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -32,6 +33,11 @@ public class TrainingType {
 	@JoinColumn(name = "fk_training_type", referencedColumnName = "idtraining_type")
 	@JsonIgnore
 	private List<TrainingSession> trainerSessions;
+	
+	@ManyToMany(mappedBy="trainingTypes")
+	@JsonIgnore
+	List<User> trainers;
+	
 
 	public TrainingType() {
 

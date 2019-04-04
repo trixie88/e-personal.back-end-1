@@ -18,6 +18,9 @@ public interface TrainingTypeRepository extends JpaRepository<TrainingType, Inte
 
 	TrainingType findById(int id);
 
+	
+	TrainingType findByTitle(String title);
+	
 	@Modifying
 	@Query(value = "insert into trainer_specialization (fk_trainer_id, fk_training_type) VALUES (:trainerId,:typeId)", nativeQuery = true)
 	@Transactional
@@ -27,7 +30,9 @@ public interface TrainingTypeRepository extends JpaRepository<TrainingType, Inte
 	@Query(value = "delete from trainer_specialization where fk_trainer_id =:trainerId and fk_training_type =:typeId", nativeQuery = true)
 	@Transactional
 	void removeType(@Param("trainerId") int fk_trainer_id, @Param("typeId") int fk_training_type);
-
+	 
+	
+	
 	@Query(value = "select idtraining_type,specialization_title from training_type,trainer_specialization,user where idtraining_type = fk_training_type "
 			+ "and fk_trainer_id = iduser and iduser = ?1", nativeQuery = true)
 	List<TrainingType> findTrainersTypes(int iduser);

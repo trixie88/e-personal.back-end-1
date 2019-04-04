@@ -18,10 +18,13 @@ public interface AreaRepository extends JpaRepository<Area, Integer>{
 
 	Area findById(int id);
 	
+	Area findByCity(String city);
+	
 	@Modifying
     @Query(value = "insert into trainer_area (fk_trainer_id, fk_area_id) VALUES (:trainerId,:areaId)", nativeQuery = true)
     @Transactional
     void addArea(@Param("trainerId") int fk_trainer_id, @Param("areaId") int fk_area_id);
+	
 	
 	@Modifying
     @Query(value = "delete from trainer_area where fk_trainer_id =:trainerId and fk_area_id =:areaId", nativeQuery = true)

@@ -1,6 +1,7 @@
 package com.msg.msg.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -9,6 +10,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -59,6 +63,20 @@ public class User implements Serializable {
 
 	@Column(name = "is_active")
 	private int activeStatus;
+	
+	@ManyToMany
+	@JoinTable(
+	name="trainer_area",
+	joinColumns=@JoinColumn(name="fk_trainer_id"),
+	inverseJoinColumns=@JoinColumn(name="fk_area_id"))
+	List <Area> areas;
+	
+	@ManyToMany
+	@JoinTable(
+	name="trainer_specialization",
+	joinColumns=@JoinColumn(name="fk_trainer_id"),
+	inverseJoinColumns=@JoinColumn(name="fk_training_type"))
+	List<TrainingType> trainingTypes;
 
 	@OneToMany
 	@JoinColumn(name = "fk_sender_id", referencedColumnName = "iduser")
@@ -111,7 +129,11 @@ public class User implements Serializable {
 		this.email = email;
 		this.price = price;
 		this.description = description;
+		this.trainingTypes=new ArrayList<TrainingType>();
+		this.areas=new ArrayList<Area>();
 	}
+
+	
 
 	public int getId() {
 		return id;
@@ -244,6 +266,44 @@ public class User implements Serializable {
 	public void setTokens(List<Token> tokens) {
 		this.tokens = tokens;
 	}
+	
+	
+
+	public List<Area> getAreas() {
+		return areas;
+	}
+	
+	public void setAreas(List<Area> areas) {
+		this.areas = areas;
+	}
+	
+	
+
+	public List<TrainingType> getTrainingTypes() {
+		return trainingTypes;
+	}
+
+	public void setTrainingTypes(List<TrainingType> trainingTypes) {
+		this.trainingTypes = trainingTypes;
+	}
+	
+	public void addTrainingType(TrainingType trainingType) {
+		this.trainingTypes.add(trainingType);
+	}
+	
+	public void removeTrainingType(TrainingType trainingType) {
+		this.trainingTypes.remove(this.trainingTypes.indexOf(trainingType));
+	}
+
+	public void addArea(Area area) {
+		this.areas.add(area);
+	}
+	
+	public void removeArea(Area area) {
+		this.areas.remove(this.areas.indexOf(area));
+	}
+	
+	
 
 	public static void validateUser(User user) {
 		if (user == null) {

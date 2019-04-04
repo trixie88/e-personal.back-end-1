@@ -1,6 +1,7 @@
 package com.msg.msg.controllers;
 
 import java.io.Console;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ import com.msg.msg.repositories.TrainingTypeRepository;
 import com.msg.msg.repositories.UserRepository;
 
 @RestController
-@RequestMapping("/find")
+@RequestMapping("/user")
 @CrossOrigin(origins = "*")
 public class UserController {
 
@@ -42,7 +43,7 @@ public class UserController {
 	@Autowired
 	TokenRepository tokenRepository;
 
-	@GetMapping("/user/{id}")
+	@GetMapping("/getUser/{id}")
 	public User findUser(@PathVariable int id) {
 		User user = userRepository.findById(id);
 		if (user == null) {
@@ -51,55 +52,132 @@ public class UserController {
 			return user;
 		}
 	}
+	
+	@GetMapping("/allUsers")
+	public List<User> allUsers(){
+		return userRepository.findAll();
+	}
 
+	
+//	@GetMapping("/userByAreaAndTrainingType/{areaId}/{trainingTypeId}")
+//	public List<User> getByAreaAndType(@PathVariable int areaId, @PathVariable int trainingTypeId){
+//		Area area=areaRepository.findById(areaId);
+//		TrainingType trainingType=trainingTypeRepository.findById(trainingTypeId);
+//		if(area==null || trainingType==null) {
+//			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid AreaId or TrainingTypeID");
+//		}
+//		return userRepository.findByAreasAndTrainingTypes(area, trainingType);
+//	}
+	
+	@GetMapping("/trainersByAreaAndTrainingType/{areaIdList}/{trainingTypeIdList}")
+	public List<User> getByAreasAndTypes(@PathVariable int[] areaIdList, @PathVariable int[] trainingTypeIdList){
+		List<Area> areas=new ArrayList<Area>();
+		List <TrainingType> trainingTypes=new ArrayList<TrainingType>();
+		for (int areadId: areaIdList) {
+			areas.add(areaRepository.findById(areadId));
+		}
+		for (int trainingTypeId: trainingTypeIdList) {
+			trainingTypes.add(trainingTypeRepository.findById(trainingTypeId));
+		}
+//		return trainingTypes;
+		return userRepository.findDistinctUsersByAreasInAndTrainingTypesIn(areas, trainingTypes);
+	}
+		
+
+	
 	@PutMapping("/update")
 	public User updateUser(@RequestBody User user, @RequestHeader(value = "X-MSG-AUTH") String tokenAlphanumeric) {
 		Token.validateToken(tokenAlphanumeric, tokenRepository);
 		try {
-			System.out.println("++++++++++++++++++++++++++++++++++++++++++++++");
-			System.out.print(user);
-			userRepository.save(user);
-			return user;
+			User clonedUser=userRepository.findById(user.getId());
+			clonedUser.setFirstName(user.getFirstName());
+			clonedUser.setLastName(user.getLastName());
+			clonedUser.setEmail(user.getEmail());
+			clonedUser.setPrice(user.getPrice());
+			clonedUser.setAreas(user.getAreas());
+			clonedUser.setTrainingTypes(user.getTrainingTypes());
+			userRepository.save(clonedUser);
+			return clonedUser;
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Couldn't Update User");
 		}
 
 	}
 
-	@GetMapping("/trainer/{specialization_title}/{city}")
-	public List<User> getYourTrainer(@PathVariable String specialization_title, @PathVariable String city) {
-		return userRepository.findTrainerByAreaAndType(specialization_title, city);
+//	@GetMapping("/trainer/{title}/{city}")
+//	public List<User> getYourTrainer(@PathVariable String title, @PathVariable String city) {
+//		
+//		return userRepository.findTrainerByAreaAndType(title, city);
+//	}
+	@GetMapping("/trainer/{title}/{city}")
+	public List<User> getYourTrainer(@PathVariable String title, @PathVariable String city) {
+		TrainingType trainingType=trainingTypeRepository.findByTitle(title);
+		Area area=areaRepository.findByCity(city);
+		return userRepository.findByAreasAndTrainingTypes(area, trainingType);
 	}
 
-	@GetMapping("/trainer/{specialization_title}/{city}/{price}")
-	public List<User> getYourTrainer(@PathVariable String specialization_title, @PathVariable String city,
+//	@GetMapping("/trainer/{specialization_title}/{city}/{price}")
+//	public List<User> getYourTrainer(@PathVariable String specialization_title, @PathVariable String city,
+//			@PathVariable double price) {
+//		return userRepository.findTrainerByAreaAndTypeAndPrice(specialization_title, city, price);
+//	}
+	
+	@GetMapping("/trainer/{title}/{city}/{price}")
+	public List<User> getYourTrainer(@PathVariable String title, @PathVariable String city,
 			@PathVariable double price) {
-		return userRepository.findTrainerByAreaAndTypeAndPrice(specialization_title, city, price);
+		TrainingType trainingType=trainingTypeRepository.findByTitle(title);
+		Area area=areaRepository.findByCity(city);
+		return userRepository.findByAreasAndTrainingTypesAndPrice(area, trainingType, price);
 	}
 
-	@GetMapping("trainer-area/{idarea}")
-	public List<User> getTrainerByArea(@PathVariable int idarea) {
-		return userRepository.findTrainerByArea(idarea);
+//	@GetMapping("trainer-area/{idarea}")
+//	public List<User> getTrainerByArea(@PathVariable int idarea) {
+//		return userRepository.findTrainerByArea(idarea);
+//	}
+	@GetMapping("trainer-area/{areaId}")
+	public List<User> getTrainerByArea(@PathVariable int areaId) {
+		Area area=areaRepository.findById(areaId);
+		return userRepository.findByAreas(area);
 	}
 
-	@GetMapping("trainer-area-price/{idarea}/{price}")
-	public List<User> getTrainerByAreaAndPrice(@PathVariable int idarea, @PathVariable double price) {
-		return userRepository.findTrainerByAreaAndPrice(idarea, price);
+//	@GetMapping("trainer-area-price/{idarea}/{price}")
+//	public List<User> getTrainerByAreaAndPrice(@PathVariable int idarea, @PathVariable double price) {
+//		return userRepository.findTrainerByAreaAndPrice(idarea, price);
+//	}
+	@GetMapping("trainer-area-price/{areaId}/{price}")
+	public List<User> getTrainerByAreaAndPrice(@PathVariable int areaId, @PathVariable double price) {
+		Area area=areaRepository.findById(areaId);
+		return userRepository.findByAreasAndPrice(area, price);
 	}
 
-	@GetMapping("trainer-type/{idtraining_type}")
-	public List<User> getTrainerByType(@PathVariable int idtraining_type) {
-		return userRepository.findTrainerByType(idtraining_type);
+//	@GetMapping("trainer-type/{idtraining_type}")
+//	public List<User> getTrainerByType(@PathVariable int idtraining_type) {
+//		return userRepository.findTrainerByType(idtraining_type);
+//	}
+	@GetMapping("trainer-type/{trainingTypeId}")
+	public List<User> getTrainerByType(@PathVariable int trainingTypeId) {
+		TrainingType trainingType= trainingTypeRepository.findById(trainingTypeId);
+		return userRepository.findByTrainingTypes(trainingType);
 	}
 
-	@GetMapping("trainer-type-price/{idtraining_type}/{price}")
-	public List<User> getTrainerByTypeAndPrice(@PathVariable int idtraining_type, @PathVariable double price) {
-		return userRepository.findTrainerByTypeAndPrice(idtraining_type, price);
+//	@GetMapping("trainer-type-price/{idtraining_type}/{price}")
+//	public List<User> getTrainerByTypeAndPrice(@PathVariable int idtraining_type, @PathVariable double price) {
+//		return userRepository.findTrainerByTypeAndPrice(idtraining_type, price);
+//	}
+	@GetMapping("trainer-type-price/{trainingTypeId}/{price}")
+	public List<User> getTrainerByTypeAndPrice(@PathVariable int trainingTypeId, @PathVariable double price) {
+		TrainingType trainingType= trainingTypeRepository.findById(trainingTypeId);
+		return userRepository.findByTrainingTypesAndPrice(trainingType, price);
 	}
 
+//	@GetMapping("trainer-price/{price}")
+//	public List<User> getTrainerByPrice(@PathVariable double price) {
+//		return userRepository.findTrainerByPrice(price);
+//	}
+	
 	@GetMapping("trainer-price/{price}")
 	public List<User> getTrainerByPrice(@PathVariable double price) {
-		return userRepository.findTrainerByPrice(price);
+		return userRepository.findByPriceGreaterThanAndPriceLessThanEqual(0, price);
 	}
 
 	@PostMapping("set-price/{iduser}/{price}")
