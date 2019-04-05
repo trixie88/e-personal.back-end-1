@@ -49,6 +49,24 @@ public class DatabaseHelper {
 	}
 }
 	
+	public static int getNewMessagesCount(int id) {
+		try (Connection conn = getConnection();
+				PreparedStatement ps = conn
+						.prepareStatement("select count(*) from tseam_six_3.message where seen=0 and fk_receiver_id=?");) {
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			int count  = 0;
+			if(rs.next()) {
+				count = rs.getInt("count(*)");
+			}
+			return count;
+		} catch (Exception e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
+	}
+	
+	
+	
 	public static int getInboxMsgCount(int id) {
 	try (Connection conn = getConnection();
 			PreparedStatement ps = conn
