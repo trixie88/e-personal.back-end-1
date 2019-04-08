@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.msg.msg.entities.TrainingSession;
+import com.msg.msg.entities.User;
 
 @CrossOrigin("*")
 @RepositoryRestResource
@@ -35,6 +36,8 @@ public interface TrainingSessionRepository extends JpaRepository<TrainingSession
 	
 	@Query(value = "SELECT * FROM tseam_six_3.training_session where is_read = 0 and fk_trainer_id = ?1", nativeQuery = true)
 	List<TrainingSession> findUnreadSessions(int fk_trainer_id);
+	
+	List<TrainingSession> findByTrainerAndNotificationStatusOrderByDate(User trainer, int notificationStatus);
 	
 //	@Modifying
 //    @Query(value = "UPDATE tseam_six_3.training_session SET is_canceled = 1 where fk_trainer_id =:trainerId and idtraining_session =:sessionId", nativeQuery = true)

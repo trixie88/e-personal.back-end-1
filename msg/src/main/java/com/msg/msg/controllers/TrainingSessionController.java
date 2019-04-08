@@ -95,7 +95,15 @@ public class TrainingSessionController {
 		int id = tokenRepository.getUserIDFromTokenAlphaNumeric(tokenAlphanumeric);
 		return trainingSessionRepository.findUserSessions(id);
 	}
-
+	
+	@GetMapping("/newTrainingSessions/{userId}")
+	public List<TrainingSession> newSessions(@RequestHeader(value ="X-MSG-AUTH") String tokenAlphanumeric, @PathVariable int userId){
+		Token.validateToken(tokenAlphanumeric, tokenRepository);
+		User trainer=userRepository.findById(userId);
+		User.validateUser(trainer);
+		return trainingSessionRepository.findByTrainerAndNotificationStatusOrderByDate(trainer, 0);
+	}
+	
 //	@GetMapping("/client-sessions-date/{date}") 
 //	public List<TrainingSession> getCientssSessionsByDate(@RequestHeader("X-MSG-AUTH") String tokenAlphanumeric,
 //			@PathVariable String date) {
