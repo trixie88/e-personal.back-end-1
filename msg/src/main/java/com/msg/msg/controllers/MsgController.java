@@ -64,8 +64,9 @@ public class MsgController {
 	public Result<Message> getSentMessages(@RequestHeader("X-MSG-AUTH") String tokenAlphanumeric,
 			@RequestParam int index1, @RequestParam int index2) {
 		Token.validateToken(tokenAlphanumeric, tokenRepository);
+		Token token=tokenRepository.findByAlphanumeric(tokenAlphanumeric);
 //		Result.validateIndexes(index1, index2);
-		int senderId = tokenRepository.getUserIDFromTokenAlphaNumeric(tokenAlphanumeric);
+		int senderId = token.getUser().getId();
 		List<Message> msgs = messageRepository.findSentMessages(senderId, index1, index2);
 		int count = DatabaseHelper.getSentMsgCount(senderId);
 		return new Result<Message>(count, msgs);
@@ -75,8 +76,9 @@ public class MsgController {
 	public Result<Message> getInboxMessages(@RequestHeader("X-MSG-AUTH") String tokenAlphanumeric,
 			@RequestParam int index1, @RequestParam int index2) {
 		Token.validateToken(tokenAlphanumeric, tokenRepository);
+		Token token=tokenRepository.findByAlphanumeric(tokenAlphanumeric);
 //		Result.validateIndexes(index1, index2);
-		int receiverId = tokenRepository.getUserIDFromTokenAlphaNumeric(tokenAlphanumeric);
+		int receiverId = token.getUser().getId();
 		List<Message> msgs = messageRepository.findInboxMessages(receiverId, index1, index2);
 		int count = DatabaseHelper.getInboxMsgCount(receiverId);
 		return new Result<Message>(count, msgs);
@@ -102,11 +104,13 @@ public class MsgController {
 	public void sendMessage(@RequestHeader("X-MSG-AUTH") String tokenAlphanumeric,
 			@PathVariable String receiverUsername, @RequestBody String content) {
 		Token.validateToken(tokenAlphanumeric, tokenRepository);
-		int senderId = tokenRepository.getUserIDFromTokenAlphaNumeric(tokenAlphanumeric);
-		User sender = userRepository.findById(senderId);
+		Token token=tokenRepository.findByAlphanumeric(tokenAlphanumeric);
+//		int senderId = tokenRepository.getUserIDFromTokenAlphaNumeric(tokenAlphanumeric);
+		User sender = token.getUser();
 		User.validateUser(sender);
 		User receiver = userRepository.findByUsername(receiverUsername);
 		User.validateUser(receiver);
+		
 		Message message = new Message(sender, receiver, content);
 		messageRepository.save(message);
 	}
