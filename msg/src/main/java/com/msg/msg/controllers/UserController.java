@@ -104,11 +104,7 @@ public class UserController {
 
 	}
 
-//	@GetMapping("/trainer/{title}/{city}")
-//	public List<User> getYourTrainer(@PathVariable String title, @PathVariable String city) {
-//		
-//		return userRepository.findTrainerByAreaAndType(title, city);
-//	}
+
 	@GetMapping("/trainer/{title}/{city}")
 	public List<User> getYourTrainer(@PathVariable String title, @PathVariable String city) {
 		TrainingType trainingType=trainingTypeRepository.findByTitle(title);
@@ -116,11 +112,7 @@ public class UserController {
 		return userRepository.findByAreasAndTrainingTypes(area, trainingType);
 	}
 
-//	@GetMapping("/trainer/{specialization_title}/{city}/{price}")
-//	public List<User> getYourTrainer(@PathVariable String specialization_title, @PathVariable String city,
-//			@PathVariable double price) {
-//		return userRepository.findTrainerByAreaAndTypeAndPrice(specialization_title, city, price);
-//	}
+
 	
 	@GetMapping("/trainer/{title}/{city}/{price}")
 	public List<User> getYourTrainer(@PathVariable String title, @PathVariable String city,
@@ -130,50 +122,34 @@ public class UserController {
 		return userRepository.findByAreasAndTrainingTypesAndPrice(area, trainingType, price);
 	}
 
-//	@GetMapping("trainer-area/{idarea}")
-//	public List<User> getTrainerByArea(@PathVariable int idarea) {
-//		return userRepository.findTrainerByArea(idarea);
-//	}
 	@GetMapping("trainer-area/{areaId}")
 	public List<User> getTrainerByArea(@PathVariable int areaId) {
 		Area area=areaRepository.findById(areaId);
 		return userRepository.findByAreas(area);
 	}
 
-//	@GetMapping("trainer-area-price/{idarea}/{price}")
-//	public List<User> getTrainerByAreaAndPrice(@PathVariable int idarea, @PathVariable double price) {
-//		return userRepository.findTrainerByAreaAndPrice(idarea, price);
-//	}
+
 	@GetMapping("trainer-area-price/{areaId}/{price}")
 	public List<User> getTrainerByAreaAndPrice(@PathVariable int areaId, @PathVariable double price) {
 		Area area=areaRepository.findById(areaId);
 		return userRepository.findByAreasAndPrice(area, price);
 	}
 
-//	@GetMapping("trainer-type/{idtraining_type}")
-//	public List<User> getTrainerByType(@PathVariable int idtraining_type) {
-//		return userRepository.findTrainerByType(idtraining_type);
-//	}
+
 	@GetMapping("trainer-type/{trainingTypeId}")
 	public List<User> getTrainerByType(@PathVariable int trainingTypeId) {
 		TrainingType trainingType= trainingTypeRepository.findById(trainingTypeId);
 		return userRepository.findByTrainingTypes(trainingType);
 	}
 
-//	@GetMapping("trainer-type-price/{idtraining_type}/{price}")
-//	public List<User> getTrainerByTypeAndPrice(@PathVariable int idtraining_type, @PathVariable double price) {
-//		return userRepository.findTrainerByTypeAndPrice(idtraining_type, price);
-//	}
+
 	@GetMapping("trainer-type-price/{trainingTypeId}/{price}")
 	public List<User> getTrainerByTypeAndPrice(@PathVariable int trainingTypeId, @PathVariable double price) {
 		TrainingType trainingType= trainingTypeRepository.findById(trainingTypeId);
 		return userRepository.findByTrainingTypesAndPrice(trainingType, price);
 	}
 
-//	@GetMapping("trainer-price/{price}")
-//	public List<User> getTrainerByPrice(@PathVariable double price) {
-//		return userRepository.findTrainerByPrice(price);
-//	}
+
 	
 	@GetMapping("trainer-price/{price}")
 	public List<User> getTrainerByPrice(@PathVariable double price) {
@@ -233,7 +209,6 @@ public class UserController {
 		Area area=areaRepository.findById(fk_area_id);
 		user.removeArea(area);
 		userRepository.save(user);
-//		areaRepository.removeArea(fk_trainer_id, fk_area_id);
 	}
 
 	@PostMapping("trainer-remove-type/{fk_trainer_id}/{training_type_id}")
@@ -269,14 +244,12 @@ public class UserController {
 	public List<TrainingType> getTrainersTypes(@PathVariable int iduser) {
 		User user=userRepository.findById(iduser);
 		return user.getTrainingTypes();
-//		return trainingTypeRepository.findTrainersTypes(iduser);
 	}
 
 	@GetMapping("/trainers-areas/{iduser}")
 	public List<Area> getTrainersAreas(@PathVariable int iduser) {
 		User user=userRepository.findById(iduser);
 		return user.getAreas();
-//		return areaRepository.findTrainersAreas(iduser);
 	}
 
 }

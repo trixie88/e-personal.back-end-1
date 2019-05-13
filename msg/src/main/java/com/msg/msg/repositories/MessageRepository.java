@@ -8,6 +8,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.msg.msg.entities.Message;
+import com.msg.msg.entities.User;
 
 @CrossOrigin("*")
 @RepositoryRestResource
@@ -15,6 +16,8 @@ public interface MessageRepository extends JpaRepository<Message, Integer> {
 
 	@Query(value="SELECT * FROM tseam_six_3.message where fk_sender_id=?1 order by time_sent desc limit ?2,?3", nativeQuery = true)
 	List <Message> findSentMessages(int fk_sender_id, int index1, int index2);
+	
+//	List<Message> findBySenderOrderByDateDesc(User sender);
 	
 	@Query(value="SELECT * FROM tseam_six_3.message where fk_receiver_id=?1 order by time_sent desc limit ?2,?3", nativeQuery = true)
 	List <Message> findInboxMessages(int fk_receiver_id, int index1, int index2);
