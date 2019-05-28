@@ -14,7 +14,7 @@ import com.msg.msg.entities.Area;
 import com.msg.msg.entities.TrainingType;
 import com.msg.msg.entities.User;
 
-@CrossOrigin("*")
+@CrossOrigin("*") // because this web service  is only used locally i have crossOrigin all (*) if it was to be deployed this must change
 @RepositoryRestResource
 public interface UserRepository extends JpaRepository<User, Integer> {
 

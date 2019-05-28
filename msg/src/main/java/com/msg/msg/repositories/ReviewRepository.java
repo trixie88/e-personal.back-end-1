@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.msg.msg.entities.Review;
 
-@CrossOrigin("*")
+@CrossOrigin("*") // because this web service  is only used locally i have crossOrigin all (*) if it was to be deployed this must change
 @RepositoryRestResource
 public interface ReviewRepository extends JpaRepository<Review, Integer>{
 

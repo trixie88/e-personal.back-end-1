@@ -14,7 +14,7 @@ import com.msg.msg.entities.Area;
 
 @RestController
 @RequestMapping("/area")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*") // because this web service  is only used locally i have crossOrigin all (*) if it was to be deployed this must change
 public class AreaController {
 
 	@Autowired

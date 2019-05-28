@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/files")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*") // because this web service  is only used locally i have crossOrigin all (*) if it was to be deployed this must change
 public class FileController {
 	 private static final Logger logger = LoggerFactory.getLogger(FileController.class);
 

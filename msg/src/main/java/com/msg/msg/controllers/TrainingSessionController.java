@@ -32,7 +32,7 @@ import com.msg.msg.repositories.UserRepository;
 
 @RestController
 @RequestMapping("/session")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*") // because this web service  is only used locally i have crossOrigin all (*) if it was to be deployed this must change
 public class TrainingSessionController {
 
 	@Autowired
