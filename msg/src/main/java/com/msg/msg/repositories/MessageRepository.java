@@ -17,7 +17,12 @@ public interface MessageRepository extends JpaRepository<Message, Integer> {
 	@Query(value="SELECT * FROM tseam_six_3.message where fk_sender_id=?1 order by time_sent desc limit ?2,?3", nativeQuery = true)
 	List <Message> findSentMessages(int fk_sender_id, int index1, int index2);
 	
-//	List<Message> findBySenderOrderByDateDesc(User sender);
+	List<Message> findBySenderOrderByDateDesc(User sender);
+	
+	List <Message> findBySenderOrReceiver(User sender, User receiver);
+	
+	//returns the chat betweeen two users
+	List <Message> findByReceiverAndSenderOrSenderAndReceiverOrderByDateAsc(User receiver, User sender, User receiver2, User sender2);
 	
 	@Query(value="SELECT * FROM tseam_six_3.message where fk_receiver_id=?1 order by time_sent desc limit ?2,?3", nativeQuery = true)
 	List <Message> findInboxMessages(int fk_receiver_id, int index1, int index2);
