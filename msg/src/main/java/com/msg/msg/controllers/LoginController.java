@@ -31,14 +31,6 @@ public class LoginController {
 	@Autowired
 	public TokenRepository tokenRepository;
 
-//	@PostMapping("/user")
-//	public Token loginUser(@RequestBody Login login) {
-//		String username = login.getUsername();
-//		String password = login.getPassword();
-//		User user = userRepository.findByUsernameAndPassword(username, CryptoConverter.encrypt(password));
-//		Token token = DatabaseHelper.createToken(user);
-//		return token;
-//	}
 
 	@PostMapping("/user")
 	public Token loginUser(@RequestBody Login login) {
@@ -56,13 +48,13 @@ public class LoginController {
 	}
 
 	@GetMapping("/userFromToken")
-	public User getFromToken(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric) {
-		int userId = tokenRepository.getUserIDFromTokenAlphaNumeric(alphanumeric);
+	public User getFromToken(@RequestHeader(value = "X-MSG-AUTH") String tokenAlphanumeric) {
+		int userId = tokenRepository.getUserIDFromTokenAlphaNumeric(tokenAlphanumeric);
 		return userRepository.findById(userId);
 	}
 
 	@PostMapping("/logout")
-	public void logout(@RequestHeader(value = "X-MSG-AUTH") String alphanumeric) {
-		tokenRepository.deleteByAlphanumeric(alphanumeric);
+	public void logout(@RequestHeader(value = "X-MSG-AUTH") String tokenAlphanumeric) {
+		tokenRepository.deleteByAlphanumeric(tokenAlphanumeric);
 	}
 }

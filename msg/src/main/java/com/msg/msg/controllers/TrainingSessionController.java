@@ -55,14 +55,14 @@ public class TrainingSessionController {
 
 	@GetMapping("/myTrainingSessions")
 	public List<TrainingSession> getTrainersSessions(@RequestHeader(value ="X-MSG-AUTH") String tokenAlphanumeric) {
-		Token.validateToken(tokenAlphanumeric, tokenRepository);
+//		Token.validateToken(tokenAlphanumeric, tokenRepository);  //Validation takes place inside ValidateTokenAspect
 		int id = tokenRepository.getUserIDFromTokenAlphaNumeric(tokenAlphanumeric);
 		return trainingSessionRepository.findTrainersSessions(id);
 	}
 	
 	@GetMapping("/trainersSession/{id}")
 	public List<TrainingSession> getSessions(@RequestHeader(value ="X-MSG-AUTH") String tokenAlphanumeric, @PathVariable int id){
-		Token.validateToken(tokenAlphanumeric, tokenRepository);
+//		Token.validateToken(tokenAlphanumeric, tokenRepository);
 		User user=userRepository.findById(id);
 		if (user==null) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid User ID");
@@ -74,48 +74,40 @@ public class TrainingSessionController {
 	@GetMapping("/trainer-sessions-date/{date}") 
 	public List<TrainingSession> getLoggedInTrainersSessionsByDate(@RequestHeader("X-MSG-AUTH") String tokenAlphanumeric,
 			@PathVariable String date) {
-		Token.validateToken(tokenAlphanumeric, tokenRepository);
+//		Token.validateToken(tokenAlphanumeric, tokenRepository);
 		int id = tokenRepository.getUserIDFromTokenAlphaNumeric(tokenAlphanumeric);
 		return trainingSessionRepository.findTrainersSessionsByDate(id, date);
-//		return trainingSessionRepository.findByIdAndDate(id, date);
 	}
 	
 	@GetMapping("/trainer-sessions-date/{date}/{id}") 
 	public List<TrainingSession> getTrainersSessionsByDate(@RequestHeader("X-MSG-AUTH") String tokenAlphanumeric,
 			@PathVariable String date, @PathVariable int id) {
-		Token.validateToken(tokenAlphanumeric, tokenRepository);
+//		Token.validateToken(tokenAlphanumeric, tokenRepository);
 		return trainingSessionRepository.findTrainersSessionsByDate(id, date);
-//		return trainingSessionRepository.findByIdAndDate(id, date);
 	}
 	
 
 	@GetMapping("/client-sessions")
 	public List<TrainingSession> getClientSessions(@RequestHeader(value ="X-MSG-AUTH") String tokenAlphanumeric) {
-		Token.validateToken(tokenAlphanumeric, tokenRepository);
+//		Token.validateToken(tokenAlphanumeric, tokenRepository);
 		int id = tokenRepository.getUserIDFromTokenAlphaNumeric(tokenAlphanumeric);
 		return trainingSessionRepository.findUserSessions(id);
 	}
 	
 	@GetMapping("/newTrainingSessions/{userId}")
 	public List<TrainingSession> newSessions(@RequestHeader(value ="X-MSG-AUTH") String tokenAlphanumeric, @PathVariable int userId){
-		Token.validateToken(tokenAlphanumeric, tokenRepository);
+//		Token.validateToken(tokenAlphanumeric, tokenRepository);
 		User trainer=userRepository.findById(userId);
 		User.validateUser(trainer);
 		return trainingSessionRepository.findByTrainerAndNotificationStatusOrderByDate(trainer, 0);
 	}
 	
-//	@GetMapping("/client-sessions-date/{date}") 
-//	public List<TrainingSession> getCientssSessionsByDate(@RequestHeader("X-MSG-AUTH") String tokenAlphanumeric,
-//			@PathVariable String date) {
-//		Token.validateToken(tokenAlphanumeric, tokenRepository);
-//		int id = tokenRepository.getUserIDFromTokenAlphaNumeric(tokenAlphanumeric);
-//		return trainingSessionRepository.findUserSessionsBydate(id, date);
-//	}
+
 	
 	@GetMapping("/client-sessions-date/{date}/{id}") 
 	public List<TrainingSession> getCientssSessionsByDate(@RequestHeader("X-MSG-AUTH") String tokenAlphanumeric,
 			@PathVariable String date, @PathVariable int id) {
-		Token.validateToken(tokenAlphanumeric, tokenRepository);
+//		Token.validateToken(tokenAlphanumeric, tokenRepository);
 		
 		return trainingSessionRepository.findUserSessionsBydate(id, date);
 	}
@@ -124,7 +116,7 @@ public class TrainingSessionController {
 	public void bookSession(@RequestHeader(value ="X-MSG-AUTH") String tokenAlphanumeric, @PathVariable int fk_trainer_id,
 			@PathVariable int idtraining_type, @PathVariable int idarea, @PathVariable String date,
 			@PathVariable String time) {
-		Token.validateToken(tokenAlphanumeric, tokenRepository);
+//		Token.validateToken(tokenAlphanumeric, tokenRepository);
 		int id = tokenRepository.getUserIDFromTokenAlphaNumeric(tokenAlphanumeric);
 		User client = userRepository.findById(id);
 		User.validateUser(client);
@@ -141,7 +133,7 @@ public class TrainingSessionController {
 	
 	@PostMapping("/cancel-session/{idtraining_session}")
 	public void cancelSession(@RequestHeader(value ="X-MSG-AUTH") String tokenAlphanumeric, @PathVariable int idtraining_session) {
-		Token.validateToken(tokenAlphanumeric, tokenRepository);
+//		Token.validateToken(tokenAlphanumeric, tokenRepository);
 		TrainingSession trainingSession = trainingSessionRepository.findById(idtraining_session);
 		TrainingSession.validateTrainingSession(trainingSession);
 		trainingSession.setCancelationStatus(1);
@@ -150,13 +142,13 @@ public class TrainingSessionController {
 	
 	@GetMapping("/notify-booked-sessions/{fk_trainer_id}")
 	public List<TrainingSession> notifyForUnreadSessions(@RequestHeader(value ="X-MSG-AUTH") String tokenAlphanumeric, @PathVariable int fk_trainer_id){
-		Token.validateToken(tokenAlphanumeric, tokenRepository);
+//		Token.validateToken(tokenAlphanumeric, tokenRepository);
 		return trainingSessionRepository.findUnreadSessions(fk_trainer_id);
 	}
 	
 	@PostMapping("/notified/{idtraining_session}")
 	public void notified(@RequestHeader(value ="X-MSG-AUTH") String tokenAlphanumeric, @PathVariable int idtraining_session) {
-		Token.validateToken(tokenAlphanumeric, tokenRepository);
+//		Token.validateToken(tokenAlphanumeric, tokenRepository);
 		TrainingSession trainingSession = trainingSessionRepository.findById(idtraining_session);
 		TrainingSession.validateTrainingSession(trainingSession);
 		trainingSession.setNotificationStatus(1);
@@ -165,7 +157,7 @@ public class TrainingSessionController {
 	
 	@GetMapping("/notify-canceled-sessions/{fk_trainer_id}")
 	public List<TrainingSession> getCanceledSessions(@RequestHeader(value ="X-MSG-AUTH") String tokenAlphanumeric, @PathVariable int fk_trainer_id){
-		Token.validateToken(tokenAlphanumeric, tokenRepository);
+//		Token.validateToken(tokenAlphanumeric, tokenRepository);
 		return trainingSessionRepository.findCanceledSessions(fk_trainer_id);
 	}
 
@@ -186,7 +178,7 @@ public class TrainingSessionController {
 	@PostMapping("/add-comment/{idtraining_session}/{rating}")
 	public void reviewSession(@RequestHeader(value ="X-MSG-AUTH") String tokenAlphanumeric,
 			@PathVariable int idtraining_session,@PathVariable int rating, @RequestBody String comment) {
-			Token.validateToken(tokenAlphanumeric, tokenRepository);
+//			Token.validateToken(tokenAlphanumeric, tokenRepository);
 			TrainingSession trainingSession = trainingSessionRepository.findById(idtraining_session);
 			TrainingSession.validateTrainingSession(trainingSession);
 			Review review = new Review(trainingSession, comment, rating);
@@ -194,9 +186,5 @@ public class TrainingSessionController {
 
 	}
 
-//	@PostMapping("/trainer-sessions-cancel/{idtraining_session}")
-//	public void cancelSession(@PathVariable int idtraining_session) {
-//		DatabaseHelper.cancelSession(idtraining_session);
-//	}
 
 }
