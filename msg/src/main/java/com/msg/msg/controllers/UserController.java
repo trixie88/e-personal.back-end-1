@@ -220,6 +220,8 @@ public class UserController {
 		userRepository.save(user);
 
 	}
+	
+
 
 	@PostMapping("unbann-user/{iduser}")
 	public void unBannUser(@RequestHeader(value = "X-MSG-AUTH") String tokenAlphanumeric, @PathVariable int iduser) {
