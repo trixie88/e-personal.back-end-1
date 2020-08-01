@@ -15,7 +15,7 @@ import com.msg.msg.repositories.UserRepository;
 
 @RestController
 @RequestMapping("/register")
-@CrossOrigin(origins = "*") // because this web service  is only used locally i have crossOrigin all (*) if it was to be deployed this must change
+@CrossOrigin(origins = "*") //because this web service  is only used locally i have crossOrigin all (*) if it was to be deployed this must change
 public class RegisterController {
 
 	private UserRepository userRepository;

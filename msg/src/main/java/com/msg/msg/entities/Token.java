@@ -11,11 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
-
-import com.msg.msg.repositories.TokenRepository;
-
 @Entity
 public class Token implements Serializable {
 
@@ -77,17 +72,9 @@ public class Token implements Serializable {
 		this.date_of_creation = date_of_creation;
 	}
 
-	public static void validateToken(String alphanumeric, TokenRepository tokenRepository) {
-		Token token = tokenRepository.findByAlphanumeric(alphanumeric);
-		if (token == null) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not Authorized");
-		}
-	}
-
 	@Override
 	public String toString() {
-		return "Token [token_id=" + token_id + ", alphanumeric=" + alphanumeric + ", user=" + user
-				+ ", date_of_creation=" + date_of_creation + "]";
+		return "Token [token_id=" + token_id + ", alphanumeric=" + alphanumeric + ", user=" + user + ", date_of_creation=" + date_of_creation + "]";
 	}
 
 }
