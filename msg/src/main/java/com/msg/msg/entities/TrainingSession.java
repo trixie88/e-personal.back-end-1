@@ -7,7 +7,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.springframework.http.HttpStatus;
@@ -48,12 +47,6 @@ public class TrainingSession {
 
 	@Column(name = "is_canceled")
 	private int cancelationStatus;
-
-//	@OneToOne(mappedBy="session")
-//	private Review review;
-	
-//	@Column(name = "comments")
-//	private String comments;
 
 	public TrainingSession() {
 	}
@@ -138,15 +131,6 @@ public class TrainingSession {
 	public void setCancelationStatus(int cancelationStatus) {
 		this.cancelationStatus = cancelationStatus;
 	}
-	
-
-//	public Review getReview() {
-//		return review;
-//	}
-//
-//	public void setReview(Review review) {
-//		this.review = review;
-//	}
 
 	public static void validateTrainingSession(TrainingSession trainingSession) {
 		if (trainingSession == null) {
@@ -156,8 +140,7 @@ public class TrainingSession {
 
 	@Override
 	public String toString() {
-		return "TrainingSession [id=" + id + ", client=" + client + ", trainer=" + trainer + ", area=" + area
-				+ ", trainingType=" + trainingType + ", date=" + date + ", time=" + time + "]";
+		return "TrainingSession [id=" + id + ", client=" + client + ", trainer=" + trainer + ", area=" + area + ", trainingType=" + trainingType + ", date=" + date + ", time=" + time + "]";
 	}
 
 }
