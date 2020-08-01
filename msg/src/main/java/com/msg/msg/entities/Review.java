@@ -30,7 +30,7 @@ public class Review {
 
 	@Column(name = "date")
 	private Date date;// borei na ginei String
-	
+
 	@Column(name = "rating")
 	private int rating;
 
@@ -86,10 +86,7 @@ public class Review {
 
 	@Override
 	public String toString() {
-		return "Review [id=" + id + ", session=" + session + ", comment=" + comment + ", date=" + date + ", rating="
-				+ rating + "]";
+		return "Review [id=" + id + ", session=" + session + ", comment=" + comment + ", date=" + date + ", rating=" + rating + "]";
 	}
-
-
 
 }

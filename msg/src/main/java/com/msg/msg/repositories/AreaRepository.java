@@ -12,26 +12,25 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.msg.msg.entities.Area;
 
-@CrossOrigin("*") // because this web service  is only used locally i have crossOrigin all (*) if it was to be deployed this must change
+@CrossOrigin("*") // because this web service is only used locally i have crossOrigin all (*) if
+					// it was to be deployed this must change
 @RepositoryRestResource
-public interface AreaRepository extends JpaRepository<Area, Integer>{
+public interface AreaRepository extends JpaRepository<Area, Integer> {
 
 	Area findById(int id);
-	
+
 	Area findByCity(String city);
-	
+
 	@Modifying
-    @Query(value = "insert into trainer_area (fk_trainer_id, fk_area_id) VALUES (:trainerId,:areaId)", nativeQuery = true)
-    @Transactional
-    void addArea(@Param("trainerId") int fk_trainer_id, @Param("areaId") int fk_area_id);
-	
-	
+	@Query(value = "insert into trainer_area (fk_trainer_id, fk_area_id) VALUES (:trainerId,:areaId)", nativeQuery = true)
+	@Transactional
+	void addArea(@Param("trainerId") int fk_trainer_id, @Param("areaId") int fk_area_id);
+
 	@Modifying
-    @Query(value = "delete from trainer_area where fk_trainer_id =:trainerId and fk_area_id =:areaId", nativeQuery = true)
-    @Transactional
-    void removeArea(@Param("trainerId") int fk_trainer_id, @Param("areaId") int fk_area_id);
-	
-	@Query(value = "select idarea,city,address from area,trainer_area,user "
-			+ "where idarea = fk_area_id and fk_trainer_id = iduser and iduser = ?1",nativeQuery = true)
+	@Query(value = "delete from trainer_area where fk_trainer_id =:trainerId and fk_area_id =:areaId", nativeQuery = true)
+	@Transactional
+	void removeArea(@Param("trainerId") int fk_trainer_id, @Param("areaId") int fk_area_id);
+
+	@Query(value = "select idarea,city,address from area,trainer_area,user " + "where idarea = fk_area_id and fk_trainer_id = iduser and iduser = ?1", nativeQuery = true)
 	List<Area> findTrainersAreas(int iduser);
 }

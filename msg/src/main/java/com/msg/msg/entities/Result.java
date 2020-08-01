@@ -34,11 +34,10 @@ public class Result<T> {
 	public void setResults(List<T> results) {
 		this.results = results;
 	}
-	
+
 	public static void validateIndexes(int index1, int index2) {
-		if((index1<0)||(index2<0)||(index2-index1>100)||(index2-index1<0)){
-			throw new ResponseStatusException(
-			           HttpStatus.BAD_REQUEST, "Invalid index");
+		if ((index1 < 0) || (index2 < 0) || (index2 - index1 > 100) || (index2 - index1 < 0)) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid index");
 		}
 	}
 

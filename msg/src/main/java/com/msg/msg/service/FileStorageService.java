@@ -1,20 +1,22 @@
 package com.msg.msg.service;
 
-import com.msg.msg.exception.FileStorageException;
-import com.msg.msg.exception.MyFileNotFoundException;
-import com.msg.msg.property.FileStorageProperties;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.msg.msg.exception.FileStorageException;
+import com.msg.msg.exception.MyFileNotFoundException;
+import com.msg.msg.property.FileStorageProperties;
 
 @Service
 public class FileStorageService {
@@ -28,8 +30,7 @@ public class FileStorageService {
 		try {
 			Files.createDirectories(this.fileStorageLocation);
 		} catch (Exception ex) {
-			throw new FileStorageException("Could not create the directory where the uploaded files will be stored.",
-					ex);
+			throw new FileStorageException("Could not create the directory where the uploaded files will be stored.", ex);
 		}
 	}
 

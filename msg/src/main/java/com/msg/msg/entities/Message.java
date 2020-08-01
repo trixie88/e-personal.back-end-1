@@ -36,8 +36,8 @@ public class Message implements Serializable {
 
 	@Column(name = "time_sent")
 	private Date date;
-	
-	@Column(name="seen")
+
+	@Column(name = "seen")
 	private int seen;
 
 	public Message() {
@@ -89,7 +89,6 @@ public class Message implements Serializable {
 	public void setDate(Date date) {
 		this.date = date;
 	}
-	
 
 	public int getSeen() {
 		return seen;
@@ -101,8 +100,7 @@ public class Message implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Message [id=" + id + ", sender=" + sender + ", receiver=" + receiver + ", text=" + text + ", date="
-				+ date + "]";
+		return "Message [id=" + id + ", sender=" + sender + ", receiver=" + receiver + ", text=" + text + ", date=" + date + "]";
 	}
 
 }

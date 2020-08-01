@@ -33,11 +33,10 @@ public class TrainingType {
 	@JoinColumn(name = "fk_training_type", referencedColumnName = "idtraining_type")
 	@JsonIgnore
 	private List<TrainingSession> trainerSessions;
-	
-	@ManyToMany(mappedBy="trainingTypes")
+
+	@ManyToMany(mappedBy = "trainingTypes")
 	@JsonIgnore
 	List<User> trainers;
-	
 
 	public TrainingType() {
 
